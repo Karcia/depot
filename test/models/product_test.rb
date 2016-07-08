@@ -2,6 +2,7 @@ require 'test_helper'
 
 class ProductTest < ActiveSupport::TestCase
   fixtures :products
+  include ActiveModel::Validations
 
   test "product attribute must not be empty" do
     product = Product.new
@@ -57,5 +58,18 @@ class ProductTest < ActiveSupport::TestCase
                           image_url: "fred.gif")
     assert product.invalid?
     assert_equal ["has already been taken"], product.errors[:title]
+  end
+
+  test "product title must be at least 10 characters long" do
+    product = Product.new(title: "Some title",
+                          description: "yyy",
+                          price: 1,
+                          image_url: "fred.gif")
+    assert product.valid?
+
+    product.title = "Any title"
+    assert product.invalid?
+    min_title_size = Product.validators_on(:title).select { |v| v.class == ActiveModel::Validations::LengthValidator}.first.options[:minimum]
+    assert_equal ["must have at least #{min_title_size} characters"], product.errors[:title]
   end
 end
