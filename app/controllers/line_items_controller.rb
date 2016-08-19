@@ -19,12 +19,12 @@ class LineItemsController < ApplicationController
 
   def create
     product = Product.find(params[:product_id])
-    @line_item = @cart.add_product(product)
+    @line_item = @cart.add_product(product.id, product.price)
     
     respond_to do |format|
       if @line_item.save
         session[:counter] = nil
-        format.html { redirect_to @line_item.cart, notice: 'Line item was successfully created.' }
+        format.html { redirect_to @line_item.cart }
         format.json { render :show, status: :created, location: @line_item }
       else
         format.html { render :new }
@@ -48,7 +48,7 @@ class LineItemsController < ApplicationController
   def destroy
     @line_item.destroy
     respond_to do |format|
-      format.html { redirect_to line_items_url, notice: 'Line item was successfully destroyed.' }
+      format.html { redirect_to store_index_path, notice: "#{@line_item.product.title} was successfully removed from cart." }
       format.json { head :no_content }
     end
   end
@@ -60,6 +60,6 @@ class LineItemsController < ApplicationController
     end
 
     def line_item_params
-      params.require(:line_item).permit(:product_id, :cart_id)
+      params.require(:line_item).permit(:product_id)
     end
 end

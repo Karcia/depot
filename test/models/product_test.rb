@@ -25,6 +25,10 @@ class ProductTest < ActiveSupport::TestCase
     assert product.invalid?
     assert_equal ["must be greater than or equal to 0.01"], product.errors[:price]
 
+    product.price = 1001
+    assert product.invalid?
+    assert_equal ["must be less than or equal to 1000"], product.errors[:price]
+
     product.price = 1
     assert product.valid?
   end
@@ -72,4 +76,6 @@ class ProductTest < ActiveSupport::TestCase
     min_title_size = Product.validators_on(:title).select { |v| v.class == ActiveModel::Validations::LengthValidator}.first.options[:minimum]
     assert_equal ["must have at least #{min_title_size} characters"], product.errors[:title]
   end
+
+
 end
