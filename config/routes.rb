@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
+
   resources :line_items
   resources :carts
   root 'store#index', as: 'store_index'
