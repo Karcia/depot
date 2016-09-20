@@ -10,13 +10,13 @@
   <% @products.each do |product| %>
     <% cache @product do %>
       <div class="entry">
-        <%= image_tag(product.image_url) %>
-          <h3><%= product.title %></h3>
-          <%= sanitize(product.description) %>
-          <div class="price_line">
-            <span class="price"><%= number_to_currency(product.price, locale: :pl) %></span>
-            <%= button_to 'Add to cart', line_items_path(product_id: product), remote: true %>
-          </div>
+        <%= link_to image_tag(product.image_url), line_items_path(product_id: product), remote: true, method: :post %>
+        <h3><%= product.title %></h3>
+        <%= sanitize(product.description) %>
+        <div class="price_line">
+          <span class="price"><%= number_to_currency(product.price, locale: :pl) %></span>
+          <%= button_to 'Add to cart', line_items_path(product_id: product), remote: true %>
+        </div>
       </div>
     <% end %>
   <% end %>

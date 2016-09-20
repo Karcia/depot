@@ -1,0 +1,5 @@
+// leave total line so that items can be added again based on js logic of showing cart when there is one new line in create.js.erb
+$('#cart tr').not('.total_line').remove();
+
+// Hide cart if emptied and length is 1
+if ($('#cart tr').length == 1) { $('#cart').hide("blind", {direction: "vertical" }, 1000); }
